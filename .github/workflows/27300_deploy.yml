@@ -1,4 +1,4 @@
-name: Run Tests  # Ime delovnega toka
+name: Check pytest  # Ime delovnega toka
 
 on:
   push:

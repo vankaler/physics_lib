@@ -1,4 +1,4 @@
-name: Preveri različice Pythona
+name: Check python version
 
 on:
   push:
