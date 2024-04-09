@@ -1,0 +1,38 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Check for test scripts
+      run: |
+        if [ ! -d "tests" ]; then
+          echo "Error: Test scripts directory not found." > error.txt
+          exit 1
+        fi
+
+    - name: Prepare testing environment
+      run: |
+        sudo apt update
+        sudo apt install python3-pip -y
+        pip3 install -r requirements.txt
+
+    - name: Run tests
+      run: |
+        pytest
+
+    - name: Upload error log
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+        name: error-log
+        path: error.txt
