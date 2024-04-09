@@ -1,38 +1,38 @@
-name: Run Tests
+name: Run Tests  # Ime delovnega toka
 
 on:
   push:
     branches:
-      - main
+      - main  # Delovni tok se sproži ob vsakem potiskanju v vejo "main"
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  test:  # Ime naloge
+    runs-on: ubuntu-latest  # Delovna okolja, na katerih se bo izvajala naloga
 
-    steps:
-    - name: Checkout repository
+    steps:  # Koraki naloge
+    - name: Checkout repository  # Korak za preverjanje izvorne kode
       uses: actions/checkout@v2
 
-    - name: Check for test scripts
+    - name: Check for test scripts  # Preveri, ali obstaja mapo "tests"
       run: |
         if [ ! -d "tests" ]; then
-          echo "Error: Test scripts directory not found." > error.txt
+          echo "Error: Test scripts directory not found." > error.txt  # Če mapa ne obstaja, ustvari napako v datoteki "error.txt"
           exit 1
         fi
 
-    - name: Prepare testing environment
+    - name: Prepare testing environment  # Pripravi okolje za testiranje
       run: |
-        sudo apt update
-        sudo apt install python3-pip -y
-        pip3 install -r requirements.txt
+        sudo apt update  # Posodobi paketni upravitelj
+        sudo apt install python3-pip -y  # Namesti Python pip
+        pip3 install -r requirements.txt  # Namesti zahtevane Python knjižnice
 
-    - name: Run tests
+    - name: Run tests  # Zažene teste
       run: |
         pytest
 
-    - name: Upload error log
-      if: failure()
+    - name: Upload error log  # Naloži datoteko z napakami
+      if: failure()  
       uses: actions/upload-artifact@v2
       with:
-        name: error-log
-        path: error.txt
+        name: error-log  # Ime datoteke
+        path: error.txt  # Pot do datoteke
