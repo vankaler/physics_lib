@@ -1,6 +1,4 @@
 
-
-
 def calculate_speed(distance, time):
     return distance / time
 
@@ -47,4 +45,7 @@ if __name__ == "__main__":
     velocity_2 = 15  # m/s
     kinetic_energy = calculate_kinetic_energy(mass_2, velocity_2)
     print("Kinetic energy:", kinetic_energy, "J")
+
+
+
 
