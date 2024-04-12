@@ -1,4 +1,4 @@
-name: Check python version
+name: Tester
 
 on:
   push:

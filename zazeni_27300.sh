@@ -1,6 +1,6 @@
 mkdir docker_dir
 cd docker_dir
-docker run -it --name testing_phisics vankaler/physics_lib
-docker rm testing_phisics
+docker run -it --name testing_physics vankaler/physics_lib
+docker rm testing_physics
 cd ..
 rmdir docker_dir

@@ -1,38 +1,31 @@
-name: Check pytest  # Ime delovnega toka
+name: Containerisation
 
 on:
-  push:
-    branches:
-      - main  # Delovni tok se sproži ob vsakem potiskanju v vejo "main"
+  workflow_run:
+    workflows:
+      - "Tester"
+    types:
+      - completed
+
+  workflow_dispatch:
 
 jobs:
-  test:  # Ime naloge
-    runs-on: ubuntu-latest  # Delovna okolja, na katerih se bo izvajala naloga
+  deploy:
+    runs-on: self-hosted
+    steps:
+      # preverjam ali 
+      - uses: actions/checkout@v4
+        name: Checkout latest commit
 
-    steps:  # Koraki naloge
-    - name: Checkout repository  # Korak za preverjanje izvorne kode
-      uses: actions/checkout@v2
+      # prijavi se v Docker
+      - name: Docker login
+        run: |
+          echo ${{ secrets.DOCKERHUB_TOKEN }} > pass.txt
+          cat pass.txt | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          rm pass.txt
 
-    - name: Check for test scripts  # Preveri, ali obstaja mapo "tests"
-      run: |
-        if [ ! -d "tests" ]; then
-          echo "Error: Test scripts directory not found." > error.txt  # Če mapa ne obstaja, ustvari napako v datoteki "error.txt"
-          exit 1
-        fi
-
-    - name: Prepare testing environment  # Pripravi okolje za testiranje
-      run: |
-        sudo apt update  # Posodobi paketni upravitelj
-        sudo apt install python3-pip -y  # Namesti Python pip
-        pip3 install -r requirements.txt  # Namesti zahtevane Python knjižnice
-
-    - name: Run tests  # Zažene teste
-      run: |
-        pytest
-
-    - name: Upload error log  # Naloži datoteko z napakami
-      if: failure()  
-      uses: actions/upload-artifact@v2
-      with:
-        name: error-log  # Ime datoteke
-        path: error.txt  # Pot do datoteke
+    
+      # zapakiraj aplikacijo
+      - name: Packege
+        run: |
+            sh zapakiraj_27300.sh
